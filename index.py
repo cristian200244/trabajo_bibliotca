@@ -17,7 +17,7 @@ login.configure(bg="lightblue")
 
 
 #============================================================
-#                     FRAME DE LOGIN
+#                     FRAME DE LOGIN INICIO DE SESION
 # ============================================================
 
 #etiquetas de login
