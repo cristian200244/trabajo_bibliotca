@@ -1,64 +1,41 @@
-#importamos la libreria de Tkinter
 
-import tkinter as tk
+# Lista de libros
+libros = []
 
-# -----------------------------
-# Función que muestra la página principal
-# -----------------------------
-def mostrar_principal():
-    frame_login.pack_forget()                 # Oculta el frame de login
-    frame_principal.pack(fill="both", expand=True)  # Muestra el frame principal
+# Lista de usuarios
+usuarios = []
 
-# -----------------------------
-# Ventana principal
-# -----------------------------
-root = tk.Tk()
-root.title("Biblioteca")
-root.geometry("300x200+550+250")
-root.minsize(300, 200)
-root.configure(bg="lightblue")
+# Cola de préstamos
+from collections import deque
+cola_prestamos = deque()
 
+# Pila de historial
+historial = []
 
-# ============================================================
-#                     FRAME DE LOGIN
-# ============================================================
-frame_login = tk.Frame(root, bg="skyblue", bd=5)
-frame_login.pack(fill="both", expand=True)
+# Agregar libro
+def agregar_libro(id, titulo, autor, año):
+    libros.append({
+        "id": id,
+        "titulo": titulo,
+        "autor": autor,
+        "año": año,
+        "estado": "disponible"
+    })
 
-# Etiquetas del login
-etiqueta = tk.Label(frame_login, text="Bienvenido al sistema de biblioteca", bg="skyblue")
-etiqueta_2 = tk.Label(frame_login, text="Ingresa usuario y contraseña", bg="skyblue")
+# Registrar usuario
+def registrar_usuario(id, nombre, tipo):
+    usuarios.append({
+        "id": id,
+        "nombre": nombre,
+        "tipo": tipo
+    })
 
-# Entrada de usuario
-entrada_usuario = tk.Entry(frame_login)
-
-# Botón para ingresar
-boton_ingresar = tk.Button(frame_login, text="Ingresar", command=mostrar_principal)
-
-# Empaquetado de widgets
-etiqueta.pack(pady=5)
-etiqueta_2.pack(pady=5)
-entrada_usuario.pack(pady=5)
-boton_ingresar.pack(pady=10)
-
-
-# ============================================================
-#                     FRAME PRINCIPAL
-# ============================================================
-frame_principal = tk.Frame(root, bg="white")
-
-label_principal = tk.Label(frame_principal, text="Bienvenido a la sección principal", bg="white")
-label_principal.pack(pady=20)
-
-
-boton_salir = tk.Button(frame_principal, text="Salir", command=root.destroy)
-boton_salir.pack()
-
-
-
-# -----------------------------
-# Iniciar la aplicación
-# -----------------------------
-root.mainloop()
-
-
+# Solicitar préstamo
+def solicitar_libro(usuario_id, libro_id):
+    for libro in libros:
+        if libro["id"] == libro_id:
+            if libro["estado"] == "disponible":
+                libro["estado"] = "prestado"
+                historial.append(f"Libro {libro_id} prestado a usuario {usuario_id}")
+            else:
+                cola_prestamos.append((usuario_id, libro_id))
